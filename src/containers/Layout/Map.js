@@ -10,7 +10,7 @@ class Map extends Component {
   state = {
     lat: 52.5170365,
     lng: 13.3888599,
-    zoom: 6
+    zoom: 4
   };
 
   componentDidMount = () => {
@@ -33,7 +33,17 @@ class Map extends Component {
     const locationData = {
       locationData: location
     };
-    this.props.saveLocation(locationData);
+    const allLocations = this.props.locations;
+
+    if (
+      !allLocations.some(
+        allLocation =>
+          allLocation.locationData.coordinates.lat === lat &&
+          allLocation.locationData.coordinates.lng === lng
+      )
+    ) {
+      this.props.saveLocation(locationData);
+    }
   };
 
   render() {
