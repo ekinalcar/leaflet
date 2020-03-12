@@ -1,7 +1,12 @@
 import React, { Component } from "react";
+
 import L from "leaflet";
-import axios from "axios";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+
+import * as actions from "./store/actions";
+
+import { connect } from "react-redux";
+
 import SearchComponent from "./SearchComponent";
 import "./App.css";
 
@@ -14,25 +19,16 @@ const Icon = L.icon({
 });
 
 class App extends Component {
-  componentDidMount = async () => {
-    const res = await axios.get(
-      "https://data.sfgov.org/resource/wr8u-xric.json",
-      {
-        params: {
-          $limit: 5
-        }
-      }
-    );
-    const incidents = res.data;
-    this.setState({ incidents: incidents });
-  };
-
   state = {
     lat: 37.7749,
     lng: -122.4194,
     zoom: 13,
     incidents: [],
     added: []
+  };
+
+  componentDidMount = () => {
+    this.props.fetchLocations();
   };
 
   handleClick = (event, addressInfo) => {
@@ -50,8 +46,10 @@ class App extends Component {
     this.setState({ added: newAdded });
   };
 
+  renderIncidents = () => {};
+
   render() {
-    return this.state.incidents ? (
+    return this.props.locations ? (
       <Map
         className="map"
         center={[this.state.lat, this.state.lng]}
@@ -62,25 +60,25 @@ class App extends Component {
           attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {this.state.incidents.map(incident => {
+        {this.props.locations.map(location => {
           const point = [
-            incident["point"]["coordinates"][1],
-            incident["point"]["coordinates"][0]
+            location["point"]["coordinates"][1],
+            location["point"]["coordinates"][0]
           ];
 
           return (
             <Marker
               icon={Icon}
               position={point}
-              key={incident["incident_number"]}
+              key={location["incident_number"]}
             >
               <Popup>
                 <span>
-                  ADDRESS: {incident["address"]}, {incident["city"]} -{" "}
-                  {incident["zip_code"]}
+                  ADDRESS: {location["address"]}, {location["city"]} -{" "}
+                  {location["zip_code"]}
                 </span>
                 <br />
-                <span>BATTALION: {incident["battalion"]}</span>
+                <span>BATTALION: {location["battalion"]}</span>
                 <br />
               </Popup>
             </Marker>
@@ -106,4 +104,19 @@ class App extends Component {
     );
   }
 }
-export default App;
+
+const mapStateToProps = state => {
+  return {
+    error: state.location.error,
+    loading: state.location.loading,
+    locations: state.location.locations
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchLocations: () => dispatch(actions.fetchLocations())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
