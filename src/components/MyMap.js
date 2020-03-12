@@ -14,7 +14,7 @@ const Icon = L.icon({
   popupAnchor: [0, -41]
 });
 
-const MyMap = ({ lat, lng, zoom, locations, handleClick, added }) => {
+const MyMap = ({ lat, lng, zoom, locations, handleClick }) => {
   return (
     <>
       <Map
@@ -33,39 +33,14 @@ const MyMap = ({ lat, lng, zoom, locations, handleClick, added }) => {
         {locations &&
           locations.map(location => {
             const point = [
-              location["point"]["coordinates"][1],
-              location["point"]["coordinates"][0]
+              location["locationData"]["coordinates"]["lat"],
+              location["locationData"]["coordinates"]["lng"]
             ];
 
             return (
-              <Marker
-                icon={Icon}
-                position={point}
-                key={location["incident_number"]}
-              >
+              <Marker icon={Icon} position={point} key={location["id"]}>
                 <Popup>
-                  <span>
-                    ADDRESS: {location["address"]}, {location["city"]} -{" "}
-                    {location["zip_code"]}
-                  </span>
-                  <br />
-                  <span>BATTALION: {location["battalion"]}</span>
-                  <br />
-                </Popup>
-              </Marker>
-            );
-          })}
-        {added &&
-          added.map(add => {
-            const addPoint = [
-              add["coordinates"]["lat"],
-              add["coordinates"]["lnt"]
-            ];
-            return (
-              <Marker icon={Icon} position={addPoint}>
-                <Popup>
-                  <span>ADDRESS: {add["address"]}</span>
-                  <br />
+                  <span>ADDRESS: {location["locationData"]["address"]}</span>
                 </Popup>
               </Marker>
             );
@@ -80,8 +55,7 @@ MyMap.propTypes = {
   lng: PropTypes.number.isRequired,
   zoom: PropTypes.number.isRequired,
   locations: PropTypes.array.isRequired,
-  handleClick: PropTypes.func.isRequired,
-  added: PropTypes.array.isRequired
+  handleClick: PropTypes.func.isRequired
 };
 
 export default MyMap;

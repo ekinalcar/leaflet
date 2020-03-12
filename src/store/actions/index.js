@@ -1,1 +1,1 @@
-export { fetchLocations } from "./location";
+export { fetchLocations, saveLocation } from "./location";

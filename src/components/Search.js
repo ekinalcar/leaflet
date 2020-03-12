@@ -15,7 +15,6 @@ const Search = props => {
             {SearchInfo.latLng["lat"]} lng:{SearchInfo.latLng["lng"]}
           </p>
           <p>Info from search component: {SearchInfo.info}</p>
-          <textarea>THIS HAPPENED TO ME</textarea>
           <button
             type="button"
             onClick={event => props.clickHandler(event, SearchInfo)}

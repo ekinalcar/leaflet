@@ -8,10 +8,9 @@ import Loader from "../../components/UI/Loader";
 
 class Map extends Component {
   state = {
-    lat: 37.7749,
-    lng: -122.4194,
-    zoom: 10,
-    added: []
+    lat: 52.5170365,
+    lng: 13.3888599,
+    zoom: 6
   };
 
   componentDidMount = () => {
@@ -20,21 +19,25 @@ class Map extends Component {
 
   handleClick = (event, addressInfo) => {
     event.preventDefault();
-    const newAdded = [...this.state.added];
+
     const lat = addressInfo.latLng.lat;
     const lng = addressInfo.latLng.lng;
-    newAdded.push({
+
+    const location = {
       coordinates: {
         lat: lat,
-        lnt: lng
+        lng: lng
       },
       address: addressInfo.info
-    });
-    this.setState({ added: newAdded });
+    };
+    const locationData = {
+      locationData: location
+    };
+    this.props.saveLocation(locationData);
   };
 
   render() {
-    const { lat, lng, zoom, added } = this.state;
+    const { lat, lng, zoom } = this.state;
     const { loading, locations } = this.props;
 
     if (loading) {
@@ -45,7 +48,6 @@ class Map extends Component {
           lat={lat}
           lng={lng}
           zoom={zoom}
-          added={added}
           handleClick={this.handleClick}
           locations={locations}
         />
@@ -64,7 +66,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchLocations: () => dispatch(actions.fetchLocations())
+    fetchLocations: () => dispatch(actions.fetchLocations()),
+    saveLocation: locationData => dispatch(actions.saveLocation(locationData))
   };
 };
 

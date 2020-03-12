@@ -7,6 +7,12 @@ export const locationStart = () => {
   };
 };
 
+export const locationEnd = () => {
+  return {
+    type: types.LOCATION_END
+  };
+};
+
 export const locationSuccess = locations => {
   return {
     type: types.LOCATION_SUCCESS,
@@ -21,24 +27,51 @@ export const locationFail = error => {
   };
 };
 
+export const saveLocationSuccess = (id, locationData) => {
+  return {
+    type: types.SAVE_LOCATION_SUCCESS,
+    id,
+    locationData
+  };
+};
+
 export const fetchLocations = () => {
   return async dispatch => {
     try {
       dispatch(locationStart());
-
       const response = await axios.get(
-        "https://data.sfgov.org/resource/wr8u-xric.json",
-        {
-          params: {
-            $limit: 5
-          }
-        }
+        `https://burger-53f79.firebaseio.com/locations.json`
       );
       if (response.data) {
-        dispatch(locationSuccess(response.data));
+        const locations = [];
+        for (let key in response.data) {
+          locations.push({ ...response.data[key], id: key });
+        }
+        dispatch(locationSuccess(locations));
+      } else {
+        dispatch(locationEnd());
       }
     } catch (err) {
-      dispatch(locationFail(err.response.data.error));
+      dispatch(locationFail(err));
+    }
+  };
+};
+
+export const saveLocation = locationData => {
+  return async dispatch => {
+    try {
+      dispatch(locationStart());
+      const response = await axios.post(
+        `https://burger-53f79.firebaseio.com/locations.json`,
+        locationData
+      );
+      if (response.data) {
+        dispatch(saveLocationSuccess(response.data.name, locationData));
+      } else {
+        dispatch(locationEnd());
+      }
+    } catch (err) {
+      dispatch(locationFail(err));
     }
   };
 };

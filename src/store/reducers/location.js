@@ -14,12 +14,31 @@ const auth = (state = initialState, action) => {
       loading: true
     };
   }
+  if (action.type === types.LOCATION_END) {
+    return {
+      ...state,
+      error: null,
+      loading: false
+    };
+  }
   if (action.type === types.LOCATION_SUCCESS) {
     return {
       ...state,
       error: null,
       loading: false,
       locations: action.locations
+    };
+  }
+  if (action.type === types.SAVE_LOCATION_SUCCESS) {
+    const newLocation = {
+      ...action.locationData,
+      id: action.id
+    };
+    return {
+      ...state,
+      loading: false,
+      locations: state.locations.concat(newLocation),
+      error: null
     };
   }
   if (action.type === types.LOCATION_FAIL) {
