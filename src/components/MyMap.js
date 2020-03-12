@@ -17,7 +17,14 @@ const Icon = L.icon({
 const MyMap = ({ lat, lng, zoom, locations, handleClick, added }) => {
   return (
     <>
-      <Map className="map" center={[lat, lng]} zoom={zoom}>
+      <Map
+        scrollWheelZoom={false}
+        touchZoom={false}
+        doubleClickZoom={false}
+        className="map"
+        center={[lat, lng]}
+        zoom={zoom}
+      >
         <Search clickHandler={handleClick} />
         <TileLayer
           attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
