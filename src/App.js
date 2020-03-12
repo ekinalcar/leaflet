@@ -7,8 +7,8 @@ import * as actions from "./store/actions";
 
 import { connect } from "react-redux";
 
-import SearchComponent from "./SearchComponent";
-import "./App.css";
+import Search from "./Search";
+import Loader from "./components/UI/Loader";
 
 const Icon = L.icon({
   iconUrl:
@@ -22,8 +22,7 @@ class App extends Component {
   state = {
     lat: 37.7749,
     lng: -122.4194,
-    zoom: 13,
-    incidents: [],
+    zoom: 10,
     added: []
   };
 
@@ -49,59 +48,63 @@ class App extends Component {
   renderIncidents = () => {};
 
   render() {
-    return this.props.locations ? (
-      <Map
-        className="map"
-        center={[this.state.lat, this.state.lng]}
-        zoom={this.state.zoom}
-      >
-        <SearchComponent clickHandler={this.handleClick} />
-        <TileLayer
-          attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {this.props.locations.map(location => {
-          const point = [
-            location["point"]["coordinates"][1],
-            location["point"]["coordinates"][0]
-          ];
+    if (this.props.loading) {
+      return <Loader />;
+    } else {
+      return this.props.locations ? (
+        <Map
+          className="map"
+          center={[this.state.lat, this.state.lng]}
+          zoom={this.state.zoom}
+        >
+          <Search clickHandler={this.handleClick} />
+          <TileLayer
+            attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {this.props.locations.map(location => {
+            const point = [
+              location["point"]["coordinates"][1],
+              location["point"]["coordinates"][0]
+            ];
 
-          return (
-            <Marker
-              icon={Icon}
-              position={point}
-              key={location["incident_number"]}
-            >
-              <Popup>
-                <span>
-                  ADDRESS: {location["address"]}, {location["city"]} -{" "}
-                  {location["zip_code"]}
-                </span>
-                <br />
-                <span>BATTALION: {location["battalion"]}</span>
-                <br />
-              </Popup>
-            </Marker>
-          );
-        })}
-        {this.state.added.map(add => {
-          const addPoint = [
-            add["coordinates"]["lat"],
-            add["coordinates"]["lnt"]
-          ];
-          return (
-            <Marker icon={Icon} position={addPoint}>
-              <Popup>
-                <span>ADDRESS: {add["address"]}</span>
-                <br />
-              </Popup>
-            </Marker>
-          );
-        })}
-      </Map>
-    ) : (
-      "TEST"
-    );
+            return (
+              <Marker
+                icon={Icon}
+                position={point}
+                key={location["incident_number"]}
+              >
+                <Popup>
+                  <span>
+                    ADDRESS: {location["address"]}, {location["city"]} -{" "}
+                    {location["zip_code"]}
+                  </span>
+                  <br />
+                  <span>BATTALION: {location["battalion"]}</span>
+                  <br />
+                </Popup>
+              </Marker>
+            );
+          })}
+          {this.state.added.map(add => {
+            const addPoint = [
+              add["coordinates"]["lat"],
+              add["coordinates"]["lnt"]
+            ];
+            return (
+              <Marker icon={Icon} position={addPoint}>
+                <Popup>
+                  <span>ADDRESS: {add["address"]}</span>
+                  <br />
+                </Popup>
+              </Marker>
+            );
+          })}
+        </Map>
+      ) : (
+        "TEST"
+      );
+    }
   }
 }
 

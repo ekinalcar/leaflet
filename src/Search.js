@@ -2,7 +2,7 @@ import React from "react";
 import ReactLeafletSearch from "react-leaflet-search";
 import { Popup } from "react-leaflet";
 
-const SearchComponent = props => {
+const Search = props => {
   const myPopup = SearchInfo => {
     return (
       <Popup>
@@ -33,4 +33,4 @@ const SearchComponent = props => {
   );
 };
 
-export default SearchComponent;
+export default Search;
