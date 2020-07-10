@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import * as actions from "../../store/actions";
+import { fetchLocations, saveLocation } from "../redux/api";
 
-import MyMap from "../../components/MyMap";
-import Loader from "../../components/UI/Loader";
+import MyMap from "./MyMap";
+import Loader from "./Loader";
 
 class Map extends Component {
   state = {
     lat: 52.5170365,
     lng: 13.3888599,
-    zoom: 4
+    zoom: 4,
   };
 
   componentDidMount = () => {
@@ -26,18 +26,18 @@ class Map extends Component {
     const location = {
       coordinates: {
         lat: lat,
-        lng: lng
+        lng: lng,
       },
-      address: addressInfo.info
+      address: addressInfo.info,
     };
     const locationData = {
-      locationData: location
+      locationData: location,
     };
     const allLocations = this.props.locations;
 
     if (
       !allLocations.some(
-        allLocation =>
+        (allLocation) =>
           allLocation.locationData.coordinates.lat === lat &&
           allLocation.locationData.coordinates.lng === lng
       )
@@ -66,18 +66,18 @@ class Map extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     error: state.location.error,
     loading: state.location.loading,
-    locations: state.location.locations
+    locations: state.location.locations,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchLocations: () => dispatch(actions.fetchLocations()),
-    saveLocation: locationData => dispatch(actions.saveLocation(locationData))
+    fetchLocations: () => dispatch(fetchLocations()),
+    saveLocation: (locationData) => dispatch(saveLocation(locationData)),
   };
 };
 

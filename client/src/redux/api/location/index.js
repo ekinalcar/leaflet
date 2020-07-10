@@ -1,42 +1,14 @@
-import * as types from "../actions/types";
+import {
+  locationSuccess,
+  locationEnd,
+  locationFail,
+  locationStart,
+  saveLocationSuccess,
+} from "../../actions/location";
 import axios from "axios";
 
-export const locationStart = () => {
-  return {
-    type: types.LOCATION_START
-  };
-};
-
-export const locationEnd = () => {
-  return {
-    type: types.LOCATION_END
-  };
-};
-
-export const locationSuccess = locations => {
-  return {
-    type: types.LOCATION_SUCCESS,
-    locations
-  };
-};
-
-export const locationFail = error => {
-  return {
-    type: types.LOCATION_FAIL,
-    error
-  };
-};
-
-export const saveLocationSuccess = (id, locationData) => {
-  return {
-    type: types.SAVE_LOCATION_SUCCESS,
-    id,
-    locationData
-  };
-};
-
 export const fetchLocations = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(locationStart());
       const response = await axios.get(
@@ -57,8 +29,8 @@ export const fetchLocations = () => {
   };
 };
 
-export const saveLocation = locationData => {
-  return async dispatch => {
+export const saveLocation = (locationData) => {
+  return async (dispatch) => {
     try {
       dispatch(locationStart());
       const response = await axios.post(
