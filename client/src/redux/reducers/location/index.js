@@ -1,9 +1,9 @@
-import * as types from "../actions/types";
+import * as types from "../../actions/types";
 
 const initialState = {
   locations: [],
   error: null,
-  loading: false
+  loading: false,
 };
 
 const auth = (state = initialState, action) => {
@@ -11,14 +11,14 @@ const auth = (state = initialState, action) => {
     return {
       ...state,
       error: null,
-      loading: true
+      loading: true,
     };
   }
   if (action.type === types.LOCATION_END) {
     return {
       ...state,
       error: null,
-      loading: false
+      loading: false,
     };
   }
   if (action.type === types.LOCATION_SUCCESS) {
@@ -26,26 +26,26 @@ const auth = (state = initialState, action) => {
       ...state,
       error: null,
       loading: false,
-      locations: action.locations
+      locations: action.locations,
     };
   }
   if (action.type === types.SAVE_LOCATION_SUCCESS) {
     const newLocation = {
       ...action.locationData,
-      id: action.id
+      id: action.id,
     };
     return {
       ...state,
       loading: false,
       locations: state.locations.concat(newLocation),
-      error: null
+      error: null,
     };
   }
   if (action.type === types.LOCATION_FAIL) {
     return {
       ...state,
       error: action.error.message,
-      loading: false
+      loading: false,
     };
   }
   return state;

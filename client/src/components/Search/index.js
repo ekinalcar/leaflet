@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import ReactLeafletSearch from "react-leaflet-search";
 import { Popup } from "react-leaflet";
 
-const Search = props => {
-  const myPopup = SearchInfo => {
+const Search = (props) => {
+  const myPopup = (SearchInfo) => {
     return (
       <Popup>
         <div>
@@ -17,7 +17,7 @@ const Search = props => {
           <p>Info from search component: {SearchInfo.info}</p>
           <button
             type="button"
-            onClick={event => props.clickHandler(event, SearchInfo)}
+            onClick={(event) => props.clickHandler(event, SearchInfo)}
           >
             Click me
           </button>
@@ -35,7 +35,7 @@ const Search = props => {
 };
 
 Search.propTypes = {
-  clickHandler: PropTypes.func.isRequired
+  clickHandler: PropTypes.func.isRequired,
 };
 
 export default Search;

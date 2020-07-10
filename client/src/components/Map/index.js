@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { fetchLocations, saveLocation } from "../redux/api";
+import { fetchLocations, saveLocation } from "../../redux/api";
 
-import MyMap from "./MyMap";
-import Loader from "./Loader";
+import MyMap from "./Container";
+import Loader from "../Loader";
 
 class Map extends Component {
   state = {
