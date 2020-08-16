@@ -3,12 +3,15 @@ const {
   getLocations,
   getLocation,
   createLocation,
+  getLocationsInRadius,
 } = require("../controllers/location");
 
 const { Location } = require("../models/Location");
 const advancedResults = require("../middleware/advancedResults");
 
 const router = express.Router();
+
+router.route("/radius/:zipcode/:distance").get(getLocationsInRadius);
 
 router
   .route("/")

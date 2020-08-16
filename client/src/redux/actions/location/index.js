@@ -1,35 +1,40 @@
-import * as types from "../types";
+import {
+  LOCATION_END,
+  LOCATION_FAIL,
+  LOCATION_START,
+  LOCATION_SUCCESS,
+  SAVE_LOCATION_SUCCESS,
+} from "../types";
 
 export const locationStart = () => {
   return {
-    type: types.LOCATION_START,
+    type: LOCATION_START,
+  };
+};
+
+export const saveLocationSuccess = (data) => {
+  return {
+    type: SAVE_LOCATION_SUCCESS,
+    data,
   };
 };
 
 export const locationEnd = () => {
   return {
-    type: types.LOCATION_END,
+    type: LOCATION_END,
   };
 };
 
-export const locationSuccess = (locations) => {
+export const locationSuccess = (data) => {
   return {
-    type: types.LOCATION_SUCCESS,
-    locations,
+    type: LOCATION_SUCCESS,
+    data,
   };
 };
 
 export const locationFail = (error) => {
   return {
-    type: types.LOCATION_FAIL,
+    type: LOCATION_FAIL,
     error,
-  };
-};
-
-export const saveLocationSuccess = (id, locationData) => {
-  return {
-    type: types.SAVE_LOCATION_SUCCESS,
-    id,
-    locationData,
   };
 };

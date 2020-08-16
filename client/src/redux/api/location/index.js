@@ -9,41 +9,42 @@ import axios from "axios";
 
 export const fetchLocations = () => {
   return async (dispatch) => {
+    dispatch(locationStart());
     try {
-      dispatch(locationStart());
-      const response = await axios.get(
-        `https://burger-53f79.firebaseio.com/locations.json`
-      );
-      if (response.data) {
-        const locations = [];
-        for (let key in response.data) {
-          locations.push({ ...response.data[key], id: key });
-        }
-        dispatch(locationSuccess(locations));
-      } else {
-        dispatch(locationEnd());
-      }
+      const response = await axios.get(`http://localhost:3001/api/locations`);
+      const {
+        data: { data },
+      } = response;
+
+      if (data.length > 0) dispatch(locationSuccess(data));
     } catch (err) {
       dispatch(locationFail(err));
+    } finally {
+      return dispatch(locationEnd());
     }
   };
 };
 
 export const saveLocation = (locationData) => {
   return async (dispatch) => {
+    dispatch(locationStart());
     try {
-      dispatch(locationStart());
       const response = await axios.post(
-        `https://burger-53f79.firebaseio.com/locations.json`,
+        `http://localhost:3001/api/locations`,
         locationData
       );
-      if (response.data) {
-        dispatch(saveLocationSuccess(response.data.name, locationData));
-      } else {
-        dispatch(locationEnd());
+      const {
+        status,
+        statusText,
+        data: { data },
+      } = response;
+      if (status === 201 && statusText === "Created") {
+        dispatch(saveLocationSuccess(data));
       }
     } catch (err) {
       dispatch(locationFail(err));
+    } finally {
+      return dispatch(locationEnd());
     }
   };
 };

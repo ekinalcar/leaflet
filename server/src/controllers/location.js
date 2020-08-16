@@ -25,11 +25,19 @@ exports.createLocation = asyncHandler(async (req, res, next) => {
       .status(400)
       .send({ success: false, error: error.details[0].message });
 
-  const { title, description, latitude, longitude, createdAt } = req.body;
+  const {
+    title,
+    description,
+    address,
+    latitude,
+    longitude,
+    createdAt,
+  } = req.body;
 
   const fieldsToCreate = {
     title,
     description,
+    address,
     latitude,
     longitude,
     createdAt,
@@ -43,7 +51,7 @@ exports.createLocation = asyncHandler(async (req, res, next) => {
   });
 });
 
-/*exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
+exports.getLocationsInRadius = asyncHandler(async (req, res, next) => {
   const { zipcode, distance } = req.params;
 
   // Get lat/lng from geocoder
@@ -54,15 +62,15 @@ exports.createLocation = asyncHandler(async (req, res, next) => {
   // Calc radius using radians
   // Divide dist by radius of Earth
   // Earth Radius = 3,963 mi / 6,378 km
-  const radius = distance / 3963;
+  const radius = distance / 6378;
 
-  const bootcamps = await Bootcamp.find({
+  const locations = await Location.find({
     location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
 
   res.status(200).json({
     success: true,
-    count: bootcamps.length,
-    data: bootcamps,
+    count: locations.length,
+    data: location,
   });
-});*/
+});

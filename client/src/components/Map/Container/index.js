@@ -1,8 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 import L from "leaflet";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import { useSelector } from "react-redux";
+
+import { map } from "lodash";
 
 import Search from "../../Search";
 
@@ -14,46 +15,47 @@ const Icon = L.icon({
   popupAnchor: [0, -41],
 });
 
-const MyMap = ({ lat, lng, zoom, locations, handleClick }) => (
-  <>
-    <Map
-      scrollWheelZoom={false}
-      touchZoom={false}
-      doubleClickZoom={false}
-      className="map"
-      center={[lat, lng]}
-      zoom={zoom}
-    >
-      <Search clickHandler={handleClick} />
-      <TileLayer
-        attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {locations &&
-        locations.map((location) => {
-          const point = [
-            location["locationData"]["coordinates"]["lat"],
-            location["locationData"]["coordinates"]["lng"],
-          ];
+const MyMap = ({ handleClick }) => {
+  const { locations, isLoading, error, lat, lng, zoom } = useSelector(
+    (state) => state.locations
+  );
 
-          return (
-            <Marker icon={Icon} position={point} key={location["id"]}>
-              <Popup>
-                <span>ADDRESS: {location["locationData"]["address"]}</span>
-              </Popup>
-            </Marker>
-          );
-        })}
-    </Map>
-  </>
-);
-
-MyMap.propTypes = {
-  lat: PropTypes.number.isRequired,
-  lng: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  locations: PropTypes.array.isRequired,
-  handleClick: PropTypes.func.isRequired,
+  return (
+    <>
+      <Map
+        scrollWheelZoom={false}
+        touchZoom={false}
+        doubleClickZoom={false}
+        className="map"
+        center={[lat, lng]}
+        zoom={zoom}
+      >
+        <Search clickHandler={handleClick} />
+        <TileLayer
+          attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {locations?.length > 0 &&
+          map(
+            locations,
+            ({
+              location: { formattedAddress },
+              _id,
+              description,
+              latitude,
+              longitude,
+            }) => (
+              <Marker key={_id} icon={Icon} position={[latitude, longitude]}>
+                <Popup>
+                  <p>DESCRIPTION : {description}</p>
+                  <p>ADDRESS: {formattedAddress}</p>
+                </Popup>
+              </Marker>
+            )
+          )}
+      </Map>
+    </>
+  );
 };
 
 export default MyMap;

@@ -1,19 +1,23 @@
-import React from "react";
-import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-
-import Header from "./components/Header/";
-import Footer from "./components/Footer/";
+import React, { useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { Route, Switch } from "react-router-dom";
 import Map from "./components/Map/";
 
-const App = () => (
-  <>
-    <Header />
+import { fetchLocations } from "./redux/api";
+
+const App = () => {
+  const dispatch = useDispatch();
+  const fetch = useCallback(() => dispatch(fetchLocations()), [dispatch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return (
     <Switch>
       <Route path="/" exact component={Map} />
-      <Redirect to="/" />
     </Switch>
-    <Footer />
-  </>
-);
+  );
+};
 
-export default withRouter(App);
+export default App;

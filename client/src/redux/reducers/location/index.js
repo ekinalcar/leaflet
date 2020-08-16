@@ -1,54 +1,54 @@
-import * as types from "../../actions/types";
+import produce from "immer";
+
+import {
+  LOCATION_END,
+  LOCATION_FAIL,
+  LOCATION_START,
+  LOCATION_SUCCESS,
+  SAVE_LOCATION_SUCCESS,
+} from "../../actions/types";
 
 const initialState = {
   locations: [],
+  isLoading: false,
   error: null,
-  loading: false,
+  lat: 52.5170365,
+  lng: 13.3888599,
+  zoom: 4,
 };
 
-const auth = (state = initialState, action) => {
-  if (action.type === types.LOCATION_START) {
-    return {
-      ...state,
-      error: null,
-      loading: true,
-    };
+const locations = produce((draft, action) => {
+  const { type } = action;
+  if (type === LOCATION_START) {
+    draft.error = null;
+    draft.isLoading = true;
+    return;
   }
-  if (action.type === types.LOCATION_END) {
-    return {
-      ...state,
-      error: null,
-      loading: false,
-    };
+  if (type === LOCATION_END) {
+    draft.isLoading = false;
+    return;
   }
-  if (action.type === types.LOCATION_SUCCESS) {
-    return {
-      ...state,
-      error: null,
-      loading: false,
-      locations: action.locations,
-    };
-  }
-  if (action.type === types.SAVE_LOCATION_SUCCESS) {
-    const newLocation = {
-      ...action.locationData,
-      id: action.id,
-    };
-    return {
-      ...state,
-      loading: false,
-      locations: state.locations.concat(newLocation),
-      error: null,
-    };
-  }
-  if (action.type === types.LOCATION_FAIL) {
-    return {
-      ...state,
-      error: action.error.message,
-      loading: false,
-    };
-  }
-  return state;
-};
 
-export default auth;
+  if (type === SAVE_LOCATION_SUCCESS) {
+    const { data } = action;
+    draft.locations = [...draft.locations, data];
+    draft.error = null;
+    return;
+  }
+
+  if (type === LOCATION_SUCCESS) {
+    const { data } = action;
+    draft.locations = data;
+    draft.error = null;
+    return;
+  }
+  if (type === LOCATION_FAIL) {
+    const { error } = action;
+    draft.error = error.message;
+    draft.isLoading = false;
+    return;
+  }
+  return draft;
+}, initialState);
+
+export default locations;

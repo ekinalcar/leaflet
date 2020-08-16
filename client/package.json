@@ -12,6 +12,8 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "immer": "^7.0.5",
     "leaflet": "^1.6.0",
+    "lodash": "^4.17.20",
+    "moment": "^2.27.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-hook-form": "^4.10.2",
