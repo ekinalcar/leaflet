@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 
 import "leaflet/dist/leaflet.css";
-import "./assets/styles/styles.css";
+import "./assets/styles/styles.scss";
 
 import App from "./App";
 
