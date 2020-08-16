@@ -1,33 +1,20 @@
-const { Router } = require("express");
+const express = require("express");
+const {
+  getLocations,
+  getLocation,
+  createLocation,
+} = require("../controllers/location");
 
-const router = Router();
-const { Location, validate } = require("../models/location");
+const { Location } = require("../models/Location");
+const advancedResults = require("../middleware/advancedResults");
 
-router.get("/", async (req, res) => {
-  try {
-    const locations = await Location.find().sort("title");
-    return res.send(locations);
-  } catch (error) {
-    return next(error);
-  }
-});
+const router = express.Router();
 
-router.post("/", async (req, res, next) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+router
+  .route("/")
+  .get(advancedResults(Location, ""), getLocations)
+  .post(createLocation);
 
-  try {
-    let location = new Location({
-      name: req.body.name,
-      isGold: req.body.isGold,
-      phone: req.body.phone,
-    });
-
-    location = await location.save();
-    return res.send(location);
-  } catch (error) {
-    return next(error);
-  }
-});
+router.route("/:id").get(getLocation);
 
 module.exports = router;
