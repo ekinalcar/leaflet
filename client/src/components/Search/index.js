@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactLeafletSearch from "react-leaflet-search";
 import { useDispatch } from "react-redux";
 import { saveLocation } from "../../redux/api";
 import { Popup } from "react-leaflet";
 
+import "./index.scss";
+
 const Search = () => {
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
 
   const onSubmit = (data, event) => {
     event.preventDefault();
-
     const location = {
       title: data["title"],
       description: data["description"],
@@ -19,9 +20,9 @@ const Search = () => {
       latitude: data["lat"],
       longitude: data["lng"],
     };
-
     return dispatch(saveLocation(location));
   };
+
   const myPopup = (SearchInfo) => (
     <Popup>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -58,14 +59,14 @@ const Search = () => {
           placeholder="Description"
           ref={register({ required: true })}
         />
-        <div>
-          <p>
-            latitude and longitude from search component: lat:
-            {SearchInfo.latLng["lat"]} lng:{SearchInfo.latLng["lng"]}
-          </p>
-          <p>Info from search component: {SearchInfo.info}</p>
-          <button type="submit">Click me</button>
-        </div>
+        <p className="info">
+          latitude and longitude from search component: lat:
+          {SearchInfo.latLng["lat"]} lng:{SearchInfo.latLng["lng"]}
+        </p>
+        <p className="info">Info from search component: {SearchInfo.info}</p>
+        <button type="submit" className="button submit">
+          Click me
+        </button>
       </form>
     </Popup>
   );
