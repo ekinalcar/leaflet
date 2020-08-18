@@ -14,7 +14,7 @@ const initialState = {
   error: null,
   lat: 52.5170365,
   lng: 13.3888599,
-  zoom: 4,
+  zoom: 5,
 };
 
 const locations = produce((draft, action) => {

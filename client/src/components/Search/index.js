@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import ReactLeafletSearch from "react-leaflet-search";
 import { useDispatch } from "react-redux";
@@ -74,6 +74,11 @@ const Search = () => {
   return (
     <ReactLeafletSearch
       position="topleft"
+      inputPlaceholder="Search for a place..."
+      openSearchOnLoad={true}
+      showMarker={true}
+      showPopup={true}
+      closeResultsOnClick={true}
       provider="OpenStreetMap"
       popUp={myPopup}
     />
