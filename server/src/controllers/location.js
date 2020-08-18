@@ -34,13 +34,35 @@ exports.createLocation = asyncHandler(async (req, res, next) => {
     createdAt,
   } = req.body;
 
+  const loc = await geocoder.reverse({
+    lat: latitude,
+    lon: longitude,
+  });
+
+  let geocoderLocation = {};
+
+  if (loc) {
+    geocoderLocation = {
+      type: "Point",
+      coordinates: [loc[0].latitude, loc[0].longitude],
+      formattedAddress: loc[0].formattedAddress,
+      street: loc[0].streetName,
+      city: loc[0].city,
+      state: loc[0].state,
+      zipcode: loc[0].zipcode,
+      countryCode: loc[0].countryCode,
+      country: loc[0].country,
+    };
+  }
+
   const fieldsToCreate = {
     title,
     description,
     address,
     latitude,
     longitude,
-    createdAt,
+    location: geocoderLocation,
+    createdAt: new Date(),
   };
 
   const location = await Location.create(fieldsToCreate);

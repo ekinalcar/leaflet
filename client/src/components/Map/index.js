@@ -1,23 +1,31 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import MyMap from "./Container";
+import { Map, TileLayer } from "react-leaflet";
+import { useSelector } from "react-redux";
 
-import { saveLocation } from "../../redux/api";
+import Marker from "../Marker";
+import Search from "../Search";
 
-const Map = () => {
-  const dispatch = useDispatch();
-  const handleClick = (event, addressInfo) => {
-    event.preventDefault();
-    const location = {
-      title: "TEST TITLE",
-      description: addressInfo["info"],
-      address: addressInfo["info"],
-      latitude: addressInfo["latLng"]["lat"],
-      longitude: addressInfo["latLng"]["lng"],
-    };
-    return dispatch(saveLocation(location));
-  };
-  return <MyMap handleClick={handleClick} />;
+const MyMap = () => {
+  const { locations, lat, lng, zoom } = useSelector((state) => state.locations);
+
+  return (
+    <>
+      <Map
+        touchZoom={false}
+        doubleClickZoom={false}
+        className="map"
+        center={[lat, lng]}
+        zoom={zoom}
+      >
+        <Search />
+        <TileLayer
+          attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {locations?.length > 0 && <Marker locations={locations} />}
+      </Map>
+    </>
+  );
 };
 
-export default Map;
+export default MyMap;

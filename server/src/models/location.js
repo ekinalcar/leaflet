@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
-const geocoder = require("../utils/geocoder");
 
 const requiredNumber = {
   type: Number,
@@ -57,26 +56,6 @@ const LocationSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-LocationSchema.pre("save", async function (next) {
-  //const loc = await geocoder.geocode(this.address);
-  const loc = await geocoder.reverse({
-    lat: this.latitude,
-    lon: this.longitude,
-  });
-
-  this.location = {
-    type: "Point",
-    coordinates: [loc[0].latitude, loc[0].latitude.longitude],
-    formattedAddress: loc[0].formattedAddress,
-    street: loc[0].streetName,
-    city: loc[0].city,
-    state: loc[0].state,
-    zipcode: loc[0].zipcode,
-    countryCode: loc[0].countryCode,
-    country: loc[0].country,
-  };
-  next();
-});
 
 const validateLocation = (location) => {
   const schema = Joi.object({
