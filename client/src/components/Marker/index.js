@@ -25,9 +25,15 @@ const Marker = ({ locations }) =>
     }) => (
       <LeafletMarker key={_id} icon={Icon} position={[latitude, longitude]}>
         <Popup>
-          <p>TITLE : {title}</p>
-          <p>DESCRIPTION : {description}</p>
-          <p>ADDRESS: {formattedAddress}</p>
+          <p>
+            <strong>TITLE</strong> : {title}
+          </p>
+          <p>
+            <strong>DESCRIPTION</strong> : {description}
+          </p>
+          <p>
+            <strong>ADDRESS</strong>: {formattedAddress}
+          </p>
         </Popup>
       </LeafletMarker>
     )

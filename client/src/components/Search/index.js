@@ -60,10 +60,9 @@ const Search = () => {
           ref={register({ required: true })}
         />
         <p className="info">
-          latitude and longitude from search component: lat:
           {SearchInfo.latLng["lat"]} lng:{SearchInfo.latLng["lng"]}
         </p>
-        <p className="info">Info from search component: {SearchInfo.info}</p>
+        <p className="info">{SearchInfo.info}</p>
         <button type="submit" className="button submit">
           Click me
         </button>
